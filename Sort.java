@@ -63,7 +63,17 @@ public class Sort {
 	 *            The list to be sorted, implements IndexedUnsortedList interface 
 	 */
 	private static <E extends Comparable<E>> void quicksort(IndexedUnsortedList<E> list) {
-		// TODO: Implement recursive quicksort algorithm 
+		int min = 0, max = list.size() - 1;
+		if (min < 0 || max >= list.size() || min >= max) return;
+		//NOTE we were told not to use the middle element because that is not O(n log n)
+		// int left, right;
+		// int middle = (max + min) / 2;
+		// E pivot = list.get(middle);
+		// // swap pivot with first element
+		// list.set(middle, list.get(min));
+		// list.set(min, pivot);
+		// left = min;
+		// right = max;
 	}
 		
 	/**
