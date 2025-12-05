@@ -63,35 +63,79 @@ public class Sort {
 	 *            The list to be sorted, implements IndexedUnsortedList interface 
 	 */
 	private static <E extends Comparable<E>> void quicksort(IndexedUnsortedList<E> list) {
-		int min = 0, max = list.size() - 1;
-		if (min < 0 || max >= list.size() || min >= max) return;
-		//NOTE we were told not to use the middle element because that is not O(n log n)
-		// int left, right;
-		// int middle = (max + min) / 2;
-		// E pivot = list.get(middle);
-		// // swap pivot with first element
-		// list.set(middle, list.get(min));
-		// list.set(min, pivot);
-		// left = min;
-		// right = max;
+		if (list == null || list.size() <= 1) return;
+		quicksort(list, 0, list.size() - 1);
 	}
+	// private static <E extends Comparable<E>> void quicksort(IndexedUnsortedList<E> list) {
+	// 	int min = 0, max = list.size() - 1;
+	// 	if (min < 0 || max >= list.size() || min >= max) return;
+	// 	//NOTE we were told not to use the middle element because that is not O(n log n)
+	// 	// int left, right;
+	// 	// int middle = (max + min) / 2;
+	// 	// E pivot = list.get(middle);
+	// 	// // swap pivot with first element
+	// 	// list.set(middle, list.get(min));
+	// 	// list.set(min, pivot);
+	// 	// left = min;
+	// 	// right = max;
+	// }
 		
-	/**
-	 * Quicksort algorithm to sort objects in a list 
-	 * that implements the IndexedUnsortedList interface,
-	 * using the given Comparator.
-	 * DO NOT MODIFY THIS METHOD SIGNATURE
-	 * 
-	 * @param <E>
-	 *            The class of elements in the list
-	 * @param list
-	 *            The list to be sorted, implements IndexedUnsortedList interface 
-	 * @param c
-	 *            The Comparator used
-	 */
+	
 	private static <E> void quicksort(IndexedUnsortedList<E> list, Comparator<E> c) {
-		// TODO: Implement recursive quicksort algorithm using Comparator
-
+		if (list == null || list.size() <= 1) return;
+		quicksort(list, c, 0, list.size() - 1);
 	}
 	
+
+	// ------- Helpers for Comparable-based quicksort ---
+	private static <E extends Comparable<E>> void quicksort(IndexedUnsortedList<E> list, int low, int high) {
+		if (low < high) {
+			int p = partition(list, low, high);
+			quicksort(list, low, p - 1);
+			quicksort(list, p + 1, high);
+		}
+	}
+
+	private static <E extends Comparable<E>> int partition(IndexedUnsortedList<E> list, int low, int high) {
+		E pivot = list.get(high);
+		int i = low - 1;
+		for (int j = low; j < high; j++) {
+			if (list.get(j).compareTo(pivot) <= 0) {
+				i++;
+				swap(list, i, j);
+			}
+		}
+		swap(list, i + 1, high);
+		return i + 1;
+	}
+
+	// ------- Helpers for Comparator-based quicksort ---
+	private static <E> void quicksort(IndexedUnsortedList<E> list, Comparator<E> c, int low, int high) {
+		if (low < high) {
+			int p = partition(list, c, low, high);
+			quicksort(list, c, low, p - 1);
+			quicksort(list, c, p + 1, high);
+		}
+	}
+
+	private static <E> int partition(IndexedUnsortedList<E> list, Comparator<E> c, int low, int high) {
+		E pivot = list.get(high);
+		int i = low - 1;
+		for (int j = low; j < high; j++) {
+			if (c.compare(list.get(j), pivot) <= 0) {
+				i++;
+				swap(list, i, j);
+			}
+		}
+		swap(list, i + 1, high);
+		return i + 1;
+	}
+
+	// Generic swap helper
+	private static <E> void swap(IndexedUnsortedList<E> list, int i, int j) {
+		if (i == j) return;
+		E tmp = list.get(i);
+		list.set(i, list.get(j));
+		list.set(j, tmp);
+	}
 }
